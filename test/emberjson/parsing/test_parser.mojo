@@ -582,5 +582,18 @@ def test_float_overflow_boundary_midpoints() raises:
         _ = _f16_bits("65520.0001")
 
 
+def test_all_zero_mantissa_at_end_of_input() raises:
+    # More than 19 mantissa characters takes the `significant_digits` path;
+    # an all-zero mantissa used to be scanned past the end of the input.
+    # The buffer is allocated at exactly the input's size so that, under
+    # ASAN, a read past it is a heap-buffer-overflow.
+    for text in ["0.00000000000000000000", "-0.000000000000000000000"]:
+        var buf = List[Byte](capacity=text.byte_length())
+        for b in text.as_bytes():
+            buf.append(b)
+        var p = Parser(Span(buf))
+        assert_equal(p.expect_float(), 0.0)
+
+
 def main() raises:
     TestSuite.discover_tests[__functions_in_module()]().run()
