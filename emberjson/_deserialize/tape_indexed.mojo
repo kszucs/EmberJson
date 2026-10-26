@@ -266,15 +266,15 @@ def _walk_tape_from_index[
     var stack = Array[_Scope, options.max_depth](uninitialized=True)
     var depth = 0
 
-    @__parameter
     @always_inline
-    def advance(out off: Int):
+    def advance(out off: Int) {mut idx}:
         off = Int(idx[])
         idx = idx.unsafe_offset(1)
 
-    @__parameter
     @always_inline
-    def visit_string(off: Int, out arena_off: Int) raises DeserializationError:
+    def visit_string(
+        off: Int, out arena_off: Int
+    ) raises DeserializationError {mut idx, mut sink, imm}:
         """The string opening at `off`: its closing quote is the next
         structural (escaped quotes are masked out of the index)."""
         var close = Int(idx[])
@@ -296,9 +296,10 @@ def _walk_tape_from_index[
             )
         sink.tape.append(_pack_word(TapeTag.STRING, UInt64(arena_off)))
 
-    @__parameter
     @always_inline
-    def visit_primitive(b: Byte, off: Int) raises DeserializationError:
+    def visit_primitive(
+        b: Byte, off: Int
+    ) raises DeserializationError {mut p, mut sink, imm}:
         if b == `"`:
             _ = visit_string(off)
         elif is_numerical_component(b):
@@ -328,9 +329,10 @@ def _walk_tape_from_index[
         else:
             raise invalid_value(b)
 
-    @__parameter
     @always_inline
-    def emit_empty(open_tag: Byte, close_tag: Byte) raises DeserializationError:
+    def emit_empty(
+        open_tag: Byte, close_tag: Byte
+    ) raises DeserializationError {mut sink, imm}:
         # An empty container never pushes a `_Scope` (there is nothing to
         # recurse into), but it is still one level deeper than its parent,
         # so it must be checked against the same limit as `push_scope` —
@@ -347,9 +349,10 @@ def _walk_tape_from_index[
         sink.tape.append(_pack_word(close_tag, UInt64(open_idx)))
         sink.tape[open_idx] = _pack_container_open(open_tag, len(sink.tape), 0)
 
-    @__parameter
     @always_inline
-    def push_scope(is_object: Bool) raises DeserializationError:
+    def push_scope(
+        is_object: Bool,
+    ) raises DeserializationError {mut stack, mut sink, mut depth, imm}:
         if unlikely(depth >= options.max_depth):
             raise too_deep()
         var dup_base: UInt32 = 0
@@ -361,9 +364,8 @@ def _walk_tape_from_index[
         sink.tape.append(0)  # patched at scope end
         depth += 1
 
-    @__parameter
     @always_inline
-    def visit_key(off: Int) raises DeserializationError:
+    def visit_key(off: Int) raises DeserializationError {mut sink, imm}:
         var arena_off = visit_string(off)
         comptime if strict_dups:
             _push_and_check_key(

@@ -450,8 +450,7 @@ def copy_to_string[
     """
     var length = ptr_dist(start, end)
 
-    @__parameter
-    def decode_escaped() raises DeserializationError -> String:
+    def decode_escaped() raises DeserializationError {imm} -> String:
         # This will usually slightly overallocate if the string contains
         # escaped unicode
         var dest = List[UInt8](capacity=length)
