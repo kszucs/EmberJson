@@ -34,7 +34,7 @@ mojo = "==1.3.0.dev2026103021"
 # Pinned to a commit so it only moves when this rev is bumped, and so the
 # nightly canary can re-solve emberserde's build environment against a new
 # compiler (`pixi update mojo emberserde`) without also pulling new commits.
-emberserde = { git = "https://github.com/kszucs/EmberSerde.git", rev = "ce21c6655625d54d45c1f3f322f0d9047232d391" }
+emberserde = { git = "file:///Users/kszucs/Workspace/EmberSerde", rev = "10020e573c3c93154944cff4a0103a902b4d3f60" }
 
 
 
@@ -55,8 +55,8 @@ mojo-compiler = "==1.3.0.dev2026103021"
 # tasks. Keep all three in sync.
 [package.build-dependencies]
 mojo-compiler = "==1.3.0.dev2026103021"
-emberserde = { git = "https://github.com/kszucs/EmberSerde.git", rev = "ce21c6655625d54d45c1f3f322f0d9047232d391" }
+emberserde = { git = "file:///Users/kszucs/Workspace/EmberSerde", rev = "10020e573c3c93154944cff4a0103a902b4d3f60" }
 
 [package.run-dependencies]
 mojo-compiler = "==1.3.0.dev2026103021"
-emberserde = { git = "https://github.com/kszucs/EmberSerde.git", rev = "ce21c6655625d54d45c1f3f322f0d9047232d391" }
+emberserde = { git = "file:///Users/kszucs/Workspace/EmberSerde", rev = "10020e573c3c93154944cff4a0103a902b4d3f60" }
