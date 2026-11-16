@@ -67,7 +67,9 @@ All JSON data is represented as this unified type.
   capture only counts brackets (simdjson On Demand style), so it is held to
   the same verdict once `.get()` runs, not the same error
 - **`emberjson/teju/`** — Teju Jagua float-to-string algorithm (large lookup tables in `tables.mojo`)
-- **`emberjson/schema.mojo`** — JSON Schema validation
+- **`emberjson/schema.mojo`** — the `coerce_*` functions for emberserde's
+  `Transform`; field validation, clamping and redaction are emberserde
+  annotations (`@__annotation(Range(0, 10))`), re-exported from `emberjson`
 - **`emberjson/_pointer.mojo`** — RFC 6901 JSON Pointer
 - **`emberjson/patch/`** — RFC 6902 JSON Patch
 - **`emberjson/lazy.mojo`** — lazy/deferred parsing

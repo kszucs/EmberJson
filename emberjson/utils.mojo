@@ -188,9 +188,7 @@ struct PaddedBuffer(Movable):
     @always_inline
     def span(ref self) -> ByteView[origin_of(self._data)]:
         """The logical input: `len` bytes, with readable NUL padding after."""
-        return Span[Byte, origin_of(self._data)](
-            unsafe_ptr=self._data.unsafe_ptr(), length=self._len
-        )
+        return Span(self._data)[: self._len]
 
 
 comptime StackArray[T: Copyable & Deinitable, size: Int] = StdArray[T, size]
